@@ -37,6 +37,7 @@ export class WebSocketManager {
 
     this.#socket.onerror = (e) => {
       console.error(err("WebSocket error"), e);
+      Deno.exit();
     };
   }
 

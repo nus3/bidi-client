@@ -26,12 +26,108 @@ export async function handleNavigatePage(ws: WebSocketManager) {
     const context = res.result.contexts[0].context;
     console.log("context", context);
 
+    const targetURL = "https://nus3.github.io/ui-labs/scheduler-yield/";
+    // REF: https://w3c.github.io/webdriver-bidi/#command-browsingContext-navigate
     await ws.sendMessage({
       method: "browsingContext.navigate",
       params: {
         context,
-        url: "https://example.com",
+        url: targetURL,
         wait: "complete",
+      },
+    });
+
+    // locateを使い対象の要素を取得
+    // REF: https://w3c.github.io/webdriver-bidi/#command-browsingContext-locateNodes
+    const locateNodesResponse = await ws.sendMessage({
+      method: "browsingContext.locateNodes",
+      params: {
+        context,
+        // REF: https://w3c.github.io/webdriver-bidi/#type-browsingContext-Locator
+        locator: {
+          type: "css",
+          value: "input[type='text']",
+        },
+      },
+    });
+    if (locateNodesResponse.result.nodes.length === 0) {
+      console.error("No nodes found.");
+      return;
+    }
+
+    const elementNode = locateNodesResponse.result.nodes[0];
+    console.log("Element found:", elementNode);
+
+    // `type: "pointer"`で element を指定するときは`BiDi.InputOrigin`を使ってる
+    // https://github.com/puppeteer/puppeteer/blob/87b667fc8ea3bc9a4661f9cdda9dd78b248a4283/packages/puppeteer-core/src/bidi/Input.ts#L416
+
+    // 元の chromium-bidi から型を確認してみると以下になる
+    // https://github.com/GoogleChromeLabs/chromium-bidi/blob/684ec4063d31323b5c87d9b24f985433f7e27dab/src/protocol/generated/webdriver-bidi.ts#L2112
+    const sharedId = elementNode.sharedId;
+    const origin = {
+      type: "element",
+      element: {
+        sharedId,
+      },
+    };
+
+    // 対象の要素に対してクリック
+    await ws.sendMessage({
+      // REF: https://w3c.github.io/webdriver-bidi/#command-input-performActions
+      method: "input.performActions",
+      params: {
+        context,
+        actions: [
+          {
+            type: "pointer",
+            id: "mouse",
+            actions: [
+              {
+                type: "pointerMove",
+                x: 0,
+                y: 0,
+                origin,
+              },
+              {
+                type: "pointerDown",
+                // 0を指定することで、左クリックをシミュレートする？
+                // TODO: 仕様書の記述を確認する
+
+                // puppeteerの実装を見ると0がleft、1がmiddle、2がrightっぽい
+                // REF: https://github.com/puppeteer/puppeteer/blob/87b667fc8ea3bc9a4661f9cdda9dd78b248a4283/packages/puppeteer-core/src/bidi/Input.ts#L433-L446
+                button: 0,
+              },
+              {
+                type: "pointerUp",
+                button: 0,
+              },
+            ],
+          },
+        ],
+      },
+    });
+
+    // キーボード入力
+    await ws.sendMessage({
+      method: "input.performActions",
+      params: {
+        context,
+        actions: [
+          {
+            type: "key",
+            id: "keyboard",
+            actions: [
+              {
+                type: "keyDown",
+                value: "H",
+              },
+              {
+                type: "keyUp",
+                value: "H",
+              },
+            ],
+          },
+        ],
       },
     });
   } catch (error) {

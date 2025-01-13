@@ -10,25 +10,46 @@ https://docs.deno.com/examples/websocket/
 
 - WebSocket インスタンスを生成すれば良さそう
 
+## WebDriverIO
+
+BiDi 周りのハンドラーの実装
+https://github.com/webdriverio/webdriverio/blob/a273d38d5724c27656fa6e8d7b8b79a716a9f00a/packages/webdriver/src/bidi/handler.ts
+
+doc
+https://webdriver.io/docs/api/webdriverBidi
+
+## puppeteer
+
+BiDi で input.performActions してそうな実装箇所
+https://github.com/puppeteer/puppeteer/blob/87b667fc8ea3bc9a4661f9cdda9dd78b248a4283/packages/puppeteer-core/src/bidi/core/BrowsingContext.ts#L486
+
+`type: "key"`の場合は 1 文字ずつ入力っぽい
+https://github.com/puppeteer/puppeteer/blob/87b667fc8ea3bc9a4661f9cdda9dd78b248a4283/packages/puppeteer-core/src/bidi/Input.ts#L54
+
+`type: "pointer"`で element を指定するときは`BiDi.InputOrigin`を使ってる
+https://github.com/puppeteer/puppeteer/blob/87b667fc8ea3bc9a4661f9cdda9dd78b248a4283/packages/puppeteer-core/src/bidi/Input.ts#L416
+
+元の chromium-bidi から型を確認してみると以下になる
+https://github.com/GoogleChromeLabs/chromium-bidi/blob/684ec4063d31323b5c87d9b24f985433f7e27dab/src/protocol/generated/webdriver-bidi.ts#L2112
+
+```
+  export type ElementOrigin = {
+    type: 'element';
+    element: Script.SharedReference;
+  };
+
+export type SharedReference = {
+    sharedId: Script.SharedId;
+    handle?: Script.Handle;
+  }
+```
+
+## WebDriver BiDi の利点
+
+https://github.com/lana-20/selenium-webdriver-bidi
+
 ## TODO
 
 - コマンドの prompt に応じてフォームの値を入力したり、サブミットする cli
 
-以下、エラーの解消から
-
-```
-Session started: {
-  type: "error",
-  id: 0,
-  error: "invalid session id",
-  message: "WebDriver session does not exist, or is not active",
-  stacktrace: "RemoteError@chrome://remote/content/shared/RemoteError.sys.mjs:8:8\n" +
-    "WebDriverError@chrome://remote/content/shared/webdriver/Errors.sys.mjs:193:5\n" +
-    "InvalidSessionIDError@chrome://remote/content/shared/webdriver/Errors.sys.mjs:448:5\n" +
-    "assert.that/<@chrome://remote/content/shared/webdriver/Assert.sys.mjs:515:13\n" +
-    "assert.session@chrome://remote/content/shared/webdriver/Assert.sys.mjs:37:4\n" +
-    "onPacket@chrome://remote/content/webdriver-bidi/WebDriverBiDiConnection.sys.mjs:220:21\n" +
-    "onMessage@chrome://remote/content/server/WebSocketTransport.sys.mjs:127:18\n" +
-    "handleEvent@chrome://remote/content/server/WebSocketTransport.sys.mjs:109:14\n"
-}
-```
+画面遷移まではできた
