@@ -4,6 +4,7 @@ import {
   handleBiDiEvent,
   handleBiDiSession,
   handleEndSession,
+  handleNavigatePage,
 } from "./bidiHandlers.ts";
 
 export class WebSocketManager {
@@ -18,6 +19,7 @@ export class WebSocketManager {
     this.#socket.onopen = async () => {
       console.log(info("WebSocket connection opened"));
       await handleBiDiSession(this);
+      await handleNavigatePage(this);
     };
 
     this.#socket.onmessage = (e) => {

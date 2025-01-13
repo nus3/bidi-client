@@ -14,6 +14,32 @@ export async function handleBiDiSession(ws: WebSocketManager) {
   }
 }
 
+export async function handleNavigatePage(ws: WebSocketManager) {
+  try {
+    // REF: https://w3c.github.io/webdriver-bidi/#command-browsingContext-getTree
+    const res = await ws.sendMessage({
+      method: "browsingContext.getTree",
+      params: {},
+    });
+    console.log("browsingContext.getTree", res);
+
+    const context = res.result.contexts[0].context;
+    console.log("context", context);
+
+    await ws.sendMessage({
+      method: "browsingContext.navigate",
+      params: {
+        context,
+        url: "https://example.com",
+        wait: "complete",
+      },
+    });
+  } catch (error) {
+    console.error("Error navigating page", error);
+    await ws.cleanup();
+  }
+}
+
 export async function handleEndSession(ws: WebSocketManager) {
   try {
     // REF: https://w3c.github.io/webdriver-bidi/#command-session-end
