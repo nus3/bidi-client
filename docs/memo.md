@@ -59,3 +59,4 @@ https://wpt.fyi/results/webdriver/tests/bidi?label=master&label=experimental&ali
 - 対象のボタンをクリックする
 - いい感じのリファクタ
 - event と script 周りを実装してみる
+- エラーハンドリング時にセッションを cleanup しきれてなさそうなので、その修正
