@@ -48,8 +48,14 @@ export type SharedReference = {
 
 https://github.com/lana-20/selenium-webdriver-bidi
 
+## WebDriver BiDi の実装状況
+
+https://wpt.fyi/results/webdriver/tests/bidi?label=master&label=experimental&aligned&q=tests%2Fbidi
+
 ## TODO
 
-- コマンドの prompt に応じてフォームの値を入力したり、サブミットする cli
-
-画面遷移まではできた
+- https://nus3.github.io/ui-labs/scheduler-yield/
+- に対して対象の input に文字列を入力する（いい感じに関数化）
+- 対象のボタンをクリックする
+- いい感じのリファクタ
+- event と script 周りを実装してみる
