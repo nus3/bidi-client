@@ -1,6 +1,6 @@
 {
   "tasks": {
-    "dev": "deno run --watch main.ts"
+    "dev": "deno run --allow-net --watch main.ts"
   },
   "imports": {
     "@cliffy/ansi": "jsr:@cliffy/ansi@^1.0.0-rc.7",
