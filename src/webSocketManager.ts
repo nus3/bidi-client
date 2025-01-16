@@ -1,7 +1,7 @@
 import { EventEmitter } from "./eventEmitter.ts";
 import { err, info, selectAction } from "./cli.ts";
 import {
-  clickClearButton,
+  clickElement,
   endBiDiSession,
   getBrowsingContext,
   handleBiDiEvent,
@@ -28,11 +28,28 @@ export class WebSocketManager {
       await navigatePage(this, ctx);
 
       await selectAction({
-        handleInput: async () => {
-          await inputText(this, ctx);
+        handleInputFirstName: async () => {
+          await inputText(this, ctx, "#firstName", "Hello");
+        },
+        handleInputLastName: async () => {
+          await inputText(this, ctx, "#lastName", "nus3");
+        },
+        handleInputEmail: async () => {
+          await inputText(this, ctx, "#email", "nus3@example.com");
+        },
+        handleClickSubmit: async () => {
+          await clickElement(
+            this,
+            ctx,
+            "#myForm > div:nth-child(4) > button:nth-child(1)",
+          );
         },
         handleClickClear: async () => {
-          await clickClearButton(this, ctx);
+          await clickElement(
+            this,
+            ctx,
+            "#myForm > div:nth-child(4) > button:nth-child(2)",
+          );
         },
       });
     };

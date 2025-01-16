@@ -32,7 +32,7 @@ export async function navigatePage(
   context: string,
 ) {
   try {
-    const targetURL = "https://nus3.github.io/ui-labs/scheduler-yield/";
+    const targetURL = "https://nus3.github.io/ui-labs/form/";
     // REF: https://w3c.github.io/webdriver-bidi/#command-browsingContext-navigate
     await ws.sendMessage({
       method: "browsingContext.navigate",
@@ -48,7 +48,12 @@ export async function navigatePage(
   }
 }
 
-export async function inputText(ws: WebSocketManager, context: string) {
+export async function inputText(
+  ws: WebSocketManager,
+  context: string,
+  selector: string,
+  text: string,
+) {
   try {
     // locateを使い対象の要素を取得
     // REF: https://w3c.github.io/webdriver-bidi/#command-browsingContext-locateNodes
@@ -59,7 +64,7 @@ export async function inputText(ws: WebSocketManager, context: string) {
         // REF: https://w3c.github.io/webdriver-bidi/#type-browsingContext-Locator
         locator: {
           type: "css",
-          value: "input[type='text']",
+          value: selector,
         },
       },
     });
@@ -119,8 +124,7 @@ export async function inputText(ws: WebSocketManager, context: string) {
       },
     });
 
-    const inputText = "Hello, World!";
-    const actions = inputText.split("").map((char) => {
+    const actions = text.split("").map((char) => {
       return {
         type: "keyDown",
         value: char,
@@ -148,7 +152,11 @@ export async function inputText(ws: WebSocketManager, context: string) {
   }
 }
 
-export async function clickClearButton(ws: WebSocketManager, context: string) {
+export async function clickElement(
+  ws: WebSocketManager,
+  context: string,
+  selector: string,
+) {
   try {
     // TODO: 要素取得の処理を共通化
     // locateを使い対象の要素を取得
@@ -160,7 +168,7 @@ export async function clickClearButton(ws: WebSocketManager, context: string) {
         // REF: https://w3c.github.io/webdriver-bidi/#type-browsingContext-Locator
         locator: {
           type: "css",
-          value: "#clear",
+          value: selector,
         },
       },
     });

@@ -61,9 +61,6 @@ https://wpt.fyi/results/webdriver/tests/bidi?label=master&label=experimental&ali
 
 ## TODO
 
-- https://nus3.github.io/ui-labs/scheduler-yield/
-- に対して対象の input に文字列を入力する（いい感じに関数化）
-- 対象のボタンをクリックする
-- いい感じのリファクタ
 - event と script 周りを実装してみる
 - エラーハンドリング時にセッションを cleanup しきれてなさそうなので、その修正
+- bidi の仕様の起源を調べる

@@ -14,12 +14,21 @@ export async function getWebSocketUrl(): Promise<string> {
 }
 
 type ActionHandler = {
-  handleInput: () => Promise<void>;
+  handleInputFirstName: () => Promise<void>;
+  handleInputLastName: () => Promise<void>;
+  handleInputEmail: () => Promise<void>;
+  handleClickSubmit: () => Promise<void>;
   handleClickClear: () => Promise<void>;
 };
 
 export async function selectAction(
-  { handleInput, handleClickClear }: ActionHandler,
+  {
+    handleInputEmail,
+    handleInputFirstName,
+    handleInputLastName,
+    handleClickSubmit,
+    handleClickClear,
+  }: ActionHandler,
 ) {
   let running = true;
 
@@ -27,17 +36,29 @@ export async function selectAction(
     const action = await Select.prompt({
       message: "Select an action",
       options: [
-        { name: "Input text", value: "input" },
-        { name: "Click clear button", value: "click" },
+        { name: "Input first name", value: "inputFirstName" },
+        { name: "Input last name", value: "inputLastName" },
+        { name: "Input email", value: "inputEmail" },
+        { name: "Click submit button", value: "clickSubmit" },
+        { name: "Click clear button", value: "clickClear" },
         { name: "Exit", value: "exit" },
       ],
     });
 
     switch (action) {
-      case "input":
-        await handleInput();
+      case "inputFirstName":
+        await handleInputFirstName();
         break;
-      case "click":
+      case "inputLastName":
+        await handleInputLastName();
+        break;
+      case "inputEmail":
+        await handleInputEmail();
+        break;
+      case "clickSubmit":
+        await handleClickSubmit();
+        break;
+      case "clickClear":
         await handleClickClear();
         break;
       case "exit":
