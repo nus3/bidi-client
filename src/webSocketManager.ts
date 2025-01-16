@@ -1,10 +1,13 @@
 import { EventEmitter } from "./eventEmitter.ts";
-import { err, info } from "./cli.ts";
+import { err, info, selectAction } from "./cli.ts";
 import {
+  clickClearButton,
+  endBiDiSession,
+  getBrowsingContext,
   handleBiDiEvent,
-  handleBiDiSession,
-  handleEndSession,
-  handleNavigatePage,
+  inputText,
+  navigatePage,
+  newBiDiSession,
 } from "./bidiHandlers.ts";
 
 export class WebSocketManager {
@@ -17,9 +20,21 @@ export class WebSocketManager {
     this.#eventEmitter = new EventEmitter();
 
     this.#socket.onopen = async () => {
+      // HACK: try catchはこっちでやった方がいいかも
       console.log(info("WebSocket connection opened"));
-      await handleBiDiSession(this);
-      await handleNavigatePage(this);
+      await newBiDiSession(this);
+
+      const ctx = await getBrowsingContext(this);
+      await navigatePage(this, ctx);
+
+      await selectAction({
+        handleInput: async () => {
+          await inputText(this, ctx);
+        },
+        handleClickClear: async () => {
+          await clickClearButton(this, ctx);
+        },
+      });
     };
 
     this.#socket.onmessage = (e) => {
@@ -43,7 +58,7 @@ export class WebSocketManager {
 
   async cleanup() {
     if (this.#socket.readyState === WebSocket.OPEN) {
-      await handleEndSession(this);
+      await endBiDiSession(this);
       this.#socket.close();
     }
   }

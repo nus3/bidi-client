@@ -1,3 +1,10 @@
+## firefox
+
+```shell
+ cd /Applications/Firefox.app/Contents/MacOS
+ ./firefox --remote-debugging-port
+```
+
 ## Cliffy
 
 https://cliffy.io/docs@v1.0.0-rc.7
