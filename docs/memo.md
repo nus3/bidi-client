@@ -30,3 +30,5 @@ https://wpt.fyi/results/webdriver/tests/bidi?label=master&label=experimental&ali
   - targetCreated イベントを使い、新しいウィンドウが作成されたのを検知する
 - エラーハンドリング時にセッションを cleanup しきれてなさそうなので、その修正
 - bidi の仕様の起源を調べる
+- 以下の Bootstrap Scripts の翻訳の続きから
+  - https://github.com/w3c/webdriver-bidi/blob/main/proposals/bootstrap-scripts.md#webdriver-client-side

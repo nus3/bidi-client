@@ -364,3 +364,90 @@ const browsingContexts = await driver.getBrowsingContexts({
   target: target.id,
 });
 ```
+
+## WebDriver BiDi Bootstrap Scripts
+
+https://github.com/w3c/webdriver-bidi/blob/main/proposals/bootstrap-scripts.md
+
+### Overview
+
+- 双方向 WebDriver プロトコルに基づく新機能である Bootstrap Scripts
+- Bootstrap Scripts は、新しいスクリプト実行コンテキストが作成されるたびに一度だけ実行
+  - そのコンテキスト内の他のスクリプトよりも先に実行されることが保証される関数
+- ページ、ワーカーサービスワーカーと同じスクリプトコンテキストで実行されるため、コンテキスト内の変数を検査、操作して、DOM と対応したり、API をポリフィルしたりすることができる
+- Bootstrap Scripts が WebDriver クライアントと通信できるようにするための messaging channel が提供
+
+### Motivation
+
+- WebDriver にはページによって生成されるイベントをリッスンしたり、継続的な通知を受け取る簡単な方法がない
+- 他のスクリプトより先に実行が保証される仕組みもない
+- 簡単な例として、ブートストラップスクリプトを使用してページ上に「DOMContentLoaded」イベントリスナーを登録し、「DOMContentLoaded」イベントが発生したときに WebDriver クライアントに通知を送信することが考えられます。これにより、クライアントにテストの準備が整ったことを知らせることができる
+  - この例ではシングルページアプリケーションが UI コンテンツを非同期にロードする場合、「DOMContentLoaded」や「load」イベントだけではアプリが安定した状態にあり、テストの準備が整っていることを示すには不十分かもしれない
+  - アプリが UI が完全にロードされたことをテストコードに知らせる方法があれば、テストコードはこのイベントをリッスンしてからテストを進めることができます。これは、タイムアウトや DOM のポーリングよりも信頼性が高く効率的
+  - これが WebDriver BiDi ならできるよ
+- 別のユースケース
+  - console.log 関数をカスタム実装してロギング
+  - PerformanceObserver を作成し、メッセージングチャネルを使用してパフォーマンスエントリをクライアントに転送する
+
+### Registering Bootstrap Scripts
+
+- WebDriver BiDi プロトコルは、3 種類のスクリプトコンテキストを定義しています: 「document」、「worker」、および「serviceWorker」
+- 各スクリプトコンテキストには一意の ID がある
+- WebDriver クライアントではスクリプトコンテキストの ID を知る前に、Bootstrap Scripts を登録する
+- example.com に属するすべてのスクリプトコンテキストに Bootstrap Scripts を登録するなどマッチパターンを使用する
+
+```json
+{
+  "id": 99,
+  "method": "registerBootstrapScript",
+  "params": {
+    "match": [{ "type": "document", "urlPattern": "http://example.com/*" }],
+    "script": "... script text to execute here ..."
+  }
+}
+```
+
+- match パラメータはスクリプトを実行すべきコンテキストを記述するルールの配列
+- レスポンスは以下
+
+```json
+{
+  "id": 99,
+  "result": { "bootstrapScriptId": "<ID>" }
+}
+```
+
+- この ID はスクリプトの特定のインスタンスを表しているわけではなく、登録を表している
+
+マッチパターン
+
+- type - 列挙型
+  - "document": DOM にアクセスできるスクリプトコンテキスト。
+  - "worker": ウェブワーカーコンテキスト。
+  - "serviceWorker": サービスワーカーコンテキスト。
+- urlPattern - URL をマッチさせるための正規表現文字列。
+  - "document"タイプの場合、関連するブラウジングコンテキストの現在の URL がチェックされます。
+  - "worker"または"serviceWorker"タイプの場合、初期スクリプトの URL がチェックされます。
+
+```json
+{ "type": "serviceWorker", "urlPattern": "https://mdn.github.io/sw-test/sw.js" }
+{ "type": "document", "urlPattern": "*://bing.com/*" }
+```
+
+### Messaging
+
+- Bootstrap Scripts は WebDriver クライアントと双方向通信する必要がある
+  - テスト自動化コードとテストページ間の調整やタイミングの管理
+  - ページがアクセスできない操作をクライアントに依頼
+  - DOM イベントをクライアントに転送
+- このシナリオを可能にするため、Bootstrap Scripts が特定のスクリプトコンテキストと一致した時に知る方法が必要
+- bootstrapScriptId と scriptContextId を使用して、特定のスクリプトコンテキストにメッセージをルーティングできます。この情報はイベントを通じて提供可能
+
+```json
+{
+  "method": "bootstrapScriptExecuted",
+  "params": { "bootstrapScriptId": "<ID>", "scriptContextId": "<ID>" }
+}
+```
+
+- このイベントをリッスンし、Bootstrap Scripts が実行されたときと、メッセージを送信する方法を追跡できる
