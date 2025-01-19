@@ -36,6 +36,58 @@ https://www.w3.org/wiki/WebDriver/2019-05-BiDi
 - spec のリポジトリを作ったのがこの会議周辺っぽい
   - Spec organisation proposal (https://github.com/jgraham/webdriver-bidi created, using Bikeshed)
 
+議事録: https://www.w3.org/2020/05/27-webdriver-minutes.html
+
+- HTTP と WebSocket の両方をサポートすることが意思決定された?
+  - 既存の WebDriver ユーザーに時間をかけてアップグレードできるようにするため
+- w3c/webdriver-bidi リポジトリのセットアップをすることがアクションとして決まった
+
+## WebDriver/2020-07-BiDi
+
+https://www.w3.org/wiki/WebDriver/2020-07-BiDi
+
+議事録
+
+https://www.w3.org/2020/07/01-webdriver-minutes.html
+
+- WebSockets の実装うまく行ってそう
+- command と event の話をしている
+
+## WebDriver/2022-08-BiDi-Automation-Summit-Berlin
+
+https://www.w3.org/wiki/WebDriver/2022-08-BiDi-Automation-Summit-Berlin
+
+- Chrome, Edge, Firefox, Selenium, Puppeteer での ロードマップ がアジェンダにある
+  - Selenium: https://docs.google.com/document/d/1dCd8Y2PYaR5mOGSmNTwllEHNmFqegfoGkP-TCKvPzSU/edit?tab=t.0#heading=h.z28d63ia672d
+    - Selenimu では CDP をサポートしていたが、CDP はブラウザのバージョンに依存し、Chomium ベースのブラウザのみ
+    - なので BiDi プロトコルをサポートする
+  - Firefox: https://wiki.mozilla.org/WebDriver/RemoteProtocol/WebDriver_BiDi
+  - Puppeteer: https://docs.google.com/presentation/d/18SJv0K1_yeF9h6Gg42El-iMtL3uGiZRYgqmrScCqCuE/edit#slide=id.g146bd9eddb0_1_23
+  - Chrome: https://github.com/GoogleChromeLabs/chromium-bidi/milestones?direction=asc&sort=title
+  - Edge: https://docs.google.com/document/d/1azpI_HHYDew5UzB_r-b9J-OsWRAP1E3g2bstAPs7yF8/edit?pli=1#heading=h.yplbn92py38w.
+
+議事録  
+https://www.w3.org/2022/08/24-webdriver-minutes.html
+
+## 2023-06-BiDi-roadmap
+
+https://www.w3.org/wiki/WebDriver/2023-06-BiDi-roadmap
+
+- 各ブラウザでの実装状況の話をしてそう
+
+議事録  
+https://www.w3.org/2023/06/14-webdriver-minutes.html
+
+- 各ブラウザでの BiDi の実装状況をスプレッドシートにまとめた
+  - https://docs.google.com/spreadsheets/d/1bkiPU5eDBCqFkx5p_VSBx_OK8gy9TeHRKQVPHKMATGQ/edit?pli=1&gid=0#gid=0
+- Chrome,Edge, Firefox では実装が進められているが WebKit では何も実装が始まっていなかった
+- Firefox 上で Puppeteer を使う際に CDP の代わりに BiDi を使えるようにしてるよって話をしてた
+  - https://docs.google.com/spreadsheets/d/1jFODscDeaqqnXC3xzMNt2biX0eY7kZ9e-KTs5GPhjG4/edit?gid=0#gid=0
+
+## 2023-TPAC
+
+https://www.w3.org/wiki/WebDriver/2023-TPAC
+
 ## 雑 memo
 
 - 最初の方の issue
