@@ -230,9 +230,39 @@ export async function endBiDiSession(ws: WebSocketManager) {
   }
 }
 
+export async function subscribeEvent(ws: WebSocketManager) {
+  try {
+    // REF: https://www.w3.org/TR/webdriver-bidi/#command-session-subscribe
+    await ws.sendMessage({
+      method: "session.subscribe",
+      params: {
+        events: ["browsingContext.contextCreated"],
+      },
+    });
+    console.log(info("Subscribe event"));
+  } catch (error) {
+    console.error("Error subscribe event:", error);
+  }
+}
+
+export async function unSubscribeEvent(ws: WebSocketManager) {
+  try {
+    // REF: https://www.w3.org/TR/webdriver-bidi/#command-session-unsubscribe
+    await ws.sendMessage({
+      method: "session.unsubscribe",
+      params: {
+        events: ["browsingContext.contextCreated"],
+      },
+    });
+    console.log(info("Unsubscribe event"));
+  } catch (error) {
+    console.error("Error unsubscribe event:", error);
+  }
+}
+
 // TODO: methodによる分岐
 // deno-lint-ignore no-explicit-any
-export function handleBiDiEvent(message: any) {
+export function onBiDiEvent(message: any) {
   // TODO: BiDiイベントの処理
   switch (message.method) {
     case "event.methodName":

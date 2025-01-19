@@ -23,6 +23,8 @@ https://wpt.fyi/results/webdriver/tests/bidi?label=master&label=experimental&ali
   - https://github.com/w3c/webdriver-bidi/blob/main/roadmap.md
 - examples を実装してみても良さそう
   - https://github.com/w3c/webdriver-bidi/blob/main/proposals/core.md#examples
+- bootstrap scripts は prelaodScript で実装されそう？
+  - https://www.w3.org/TR/webdriver-bidi/#command-script-addPreloadScript
 
 ## TODO
 
@@ -30,5 +32,3 @@ https://wpt.fyi/results/webdriver/tests/bidi?label=master&label=experimental&ali
   - targetCreated イベントを使い、新しいウィンドウが作成されたのを検知する
 - エラーハンドリング時にセッションを cleanup しきれてなさそうなので、その修正
 - bidi の仕様の起源を調べる
-- 以下の Bootstrap Scripts の翻訳の続きから
-  - https://github.com/w3c/webdriver-bidi/blob/main/proposals/bootstrap-scripts.md#webdriver-client-side

@@ -54,3 +54,32 @@ export type SharedReference = {
     handle?: Script.Handle;
   }
 ```
+
+## session.subscription
+
+https://www.w3.org/TR/webdriver-bidi/#command-session-subscribe
+
+```
+// Command Type
+session.Subscribe = (
+  method: "session.subscribe",
+  params: session.SubscriptionRequest
+)
+// Result Type
+session.SubscribeResult = {
+  subscription: session.Subscription,
+}
+```
+
+https://www.w3.org/TR/webdriver-bidi/#type-session-SubscriptionRequest
+
+```
+session.SubscriptionRequest = {
+  events: [+text],
+  ? contexts: [+browsingContext.BrowsingContext],
+  ? userContexts: [+browser.UserContext],
+}
+```
+
+chromium-bidi の型定義
+https://github.com/GoogleChromeLabs/chromium-bidi/blob/684ec4063d31323b5c87d9b24f985433f7e27dab/src/protocol/generated/webdriver-bidi.ts#L205-L211

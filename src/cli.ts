@@ -19,6 +19,8 @@ type ActionHandler = {
   handleInputEmail: () => Promise<void>;
   handleClickSubmit: () => Promise<void>;
   handleClickClear: () => Promise<void>;
+  handleSubscribeEvent: () => Promise<void>;
+  handleUnsubscribeEvent: () => Promise<void>;
 };
 
 export async function selectAction(
@@ -28,6 +30,8 @@ export async function selectAction(
     handleInputLastName,
     handleClickSubmit,
     handleClickClear,
+    handleSubscribeEvent,
+    handleUnsubscribeEvent,
   }: ActionHandler,
 ) {
   let running = true;
@@ -41,6 +45,8 @@ export async function selectAction(
         { name: "Input email", value: "inputEmail" },
         { name: "Click submit button", value: "clickSubmit" },
         { name: "Click clear button", value: "clickClear" },
+        { name: "Subscribe event", value: "subscribeEvent" },
+        { name: "Unsubscribe event", value: "unsubscribe" },
         { name: "Exit", value: "exit" },
       ],
     });
@@ -60,6 +66,12 @@ export async function selectAction(
         break;
       case "clickClear":
         await handleClickClear();
+        break;
+      case "subscribeEvent":
+        await handleSubscribeEvent();
+        break;
+      case "unsubscribe":
+        await handleUnsubscribeEvent();
         break;
       case "exit":
         running = false;

@@ -4,10 +4,12 @@ import {
   clickElement,
   endBiDiSession,
   getBrowsingContext,
-  handleBiDiEvent,
   inputText,
   navigatePage,
   newBiDiSession,
+  onBiDiEvent,
+  subscribeEvent,
+  unSubscribeEvent,
 } from "./bidiHandlers.ts";
 
 export class WebSocketManager {
@@ -51,6 +53,12 @@ export class WebSocketManager {
             "#myForm > div:nth-child(4) > button:nth-child(2)",
           );
         },
+        handleSubscribeEvent: async () => {
+          await subscribeEvent(this);
+        },
+        handleUnsubscribeEvent: async () => {
+          await unSubscribeEvent(this);
+        },
       });
     };
 
@@ -59,7 +67,7 @@ export class WebSocketManager {
       if (message.id !== undefined) {
         this.#eventEmitter.emit(message.id.toString(), message);
       } else if (message.method) {
-        handleBiDiEvent(message);
+        onBiDiEvent(message);
       }
     };
 

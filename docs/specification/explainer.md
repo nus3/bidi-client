@@ -1,17 +1,17 @@
-## Explainer
+# Explainer
 
 https://github.com/w3c/webdriver-bidi/blob/main/explainer.md
 
 Bidirectional WebDriver Protocol
 
-### Overview
+## Overview
 
 - TPAC 2019 ワーキング グループ ミーティングで議論されたシナリオと解決策を取り入れている
 - このプロトコルは、WebSockets 上で JSON-RPC メッセージングを使用して通信を行う
 - 新しいプロトコルが既存のプロトコルとどのように相互運用できるかについても議論する
 - ドキュメントには JSON API 仕様も併記されている
 
-### Goals
+## Goals
 
 - 主要なシナリオをサポート
   - DOM イベントのリスニング
@@ -35,6 +35,8 @@ Bidirectional WebDriver Protocol
   - ネイティブの開発ツールプロトコルに簡単にマッピング可能
   - ブラウザベンダーが実装および維持しやすい。
   - クライアントがブラウザ固有の開発ツールプロトコル機能で WebDriver 自動化を強化できるようにする。
+
+# proposals
 
 ## WebDriver BiDi Core Functionality
 
@@ -451,3 +453,20 @@ https://github.com/w3c/webdriver-bidi/blob/main/proposals/bootstrap-scripts.md
 ```
 
 - このイベントをリッスンし、Bootstrap Scripts が実行されたときと、メッセージを送信する方法を追跡できる
+
+WebDriver クライアントサイド
+
+- メッセージを送信するためのコマンド
+
+```json
+{
+    "method": "postMessageToBootstrapScript",
+    "params": {
+        "bootstrapScriptId": "<ID>",
+        "scriptContext": "<ID>",
+        "data": /* 任意のJSONデータ */
+    }
+}
+```
+
+- メッセージを受信するための
