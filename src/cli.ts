@@ -46,7 +46,7 @@ export async function selectAction(
         { name: "Click submit button", value: "clickSubmit" },
         { name: "Click clear button", value: "clickClear" },
         { name: "Subscribe event", value: "subscribeEvent" },
-        { name: "Unsubscribe event", value: "unsubscribe" },
+        { name: "Unsubscribe event", value: "unsubscribeEvent" },
         { name: "Exit", value: "exit" },
       ],
     });
@@ -70,7 +70,7 @@ export async function selectAction(
       case "subscribeEvent":
         await handleSubscribeEvent();
         break;
-      case "unsubscribe":
+      case "unsubscribeEvent":
         await handleUnsubscribeEvent();
         break;
       case "exit":
